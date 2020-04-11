@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[Bài tập] Xây dựng lớp mô tả Temperature</title>
+</head>
+<body>
+<input id="input" type="number" placeholder="Celsius">
+<input id="convert" type="submit" value="Convert" onclick="Convert()">
+<h4>Result: </h4><span id="result"></span>
+<script>
+    function Temperature(temperature) {
+        this.Ctemp = temperature;
+        if (temperature < -273) {
+            document.getElementById("result").innerHTML = "Please re-enter new value, minimum value Celsius is -273 degrees";
+        } else {
+            Ftemp = temperature * 1.8 + 32;
+            Ktemp = temperature + 273.15;
+        }
+        return [Ftemp, Ktemp];
+    }
+    function Convert() {
+        let a = parseInt(document.getElementById("input").value);
+        Temperature(a);
+        document.getElementById("result").innerHTML = a + "<sup> o</sup>C = " + Ftemp + "<sup> o</sup>F = " + Ktemp + "<sup> o</sup>K";
+        document.getElementById("input").value = "";
+    }
+</script>
+</body>
+</html>
