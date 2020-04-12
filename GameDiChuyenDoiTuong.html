@@ -40,13 +40,13 @@
         if (hero.left < leftPos) {
             hero.moveRight();
         }
-        if (hero.left > leftPos) {
+        else {
             hero.moveLeft();
         }
         if (hero.top < topPos) {
             hero.moveDown();
         }
-        if (hero.top > topPos) {
+        else {
             hero.moveUp();
         }
         document.getElementById('game').innerHTML = hero.getHeroElement();
