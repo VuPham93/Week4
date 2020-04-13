@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[Bài tập] Phát triển chương trình thể hiện sự tương tác giữa hai đối tượng: công tắc và bóng đèn</title>
+</head>
+<style>
+    .onoffswitch {
+        position: relative; width: 90px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        display: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 2px solid #999999; border-radius: 20px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+        font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        content: "ON";
+        padding-left: 10px;
+        background-color: #34A7C1; color: #FFFFFF;
+    }
+    .onoffswitch-inner:after {
+        content: "OFF";
+        padding-right: 10px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block; width: 18px; margin: 6px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 56px;
+        border: 2px solid #999999; border-radius: 20px;
+        transition: all 0.3s ease-in 0s;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px;
+    }
+</style>
+<body>
+<script>
+    let ElectricLamp = function (imgOff, imgOn) {
+        let image = document.createElement('img');
+        image.src = imgOff;
+        document.body.appendChild(image);
+
+        this.turnOff = function () {
+            image.src = imgOff;
+        };
+
+        this.turnOn = function () {
+            image.src = imgOn;
+        };
+    };
+
+    let SwitchButton = function (id) {
+        this.id = id;
+        this.setLamp = function (lamp) {
+            this.lamp = lamp;
+            let newButton = document.createElement('div');
+            newButton.className = 'onoffswitch';
+            newButton.innerHTML = '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="' + this.id + '">\n' +
+                '    <label class="onoffswitch-label" for="' + this.id + '">\n' +
+                '        <span class="onoffswitch-inner"></span>\n' +
+                '        <span class="onoffswitch-switch"></span>\n' +
+                '    </label>';
+            document.body.appendChild(newButton);
+
+            this.onOffEvent = function () {
+                let self = this;
+                this.inputCheck = newButton.querySelector('#' + this.id);
+                this.inputCheck.addEventListener('change', function () {
+                    if (this.checked === false) {
+                        self.lamp.turnOff()
+                    }
+                    else {
+                        self.lamp.turnOn()
+                    }
+                })
+            };
+            this.onOffEvent();
+        };
+    };
+    let newLamp = new ElectricLamp("https://media.geeksforgeeks.org/wp-content/uploads/OFFbulb.jpg", "https://media.geeksforgeeks.org/wp-content/uploads/ONbulb.jpg");
+    let button = new SwitchButton('btn_1');
+    button.setLamp(newLamp);
+
+    let newLamp2 = new ElectricLamp("https://www.w3schools.com/js/pic_bulboff.gif", "https://www.w3schools.com/js/pic_bulbon.gif");
+    let button2 = new SwitchButton('btn_2');
+    button2.setLamp(newLamp2);
+</script>
+</body>
+</html>
