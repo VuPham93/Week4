@@ -71,29 +71,29 @@
         this.id = id;
         this.setLamp = function (lamp) {
             this.lamp = lamp;
-            let newButton = document.createElement('div');
-            newButton.className = 'onoffswitch';
-            newButton.innerHTML = '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="' + this.id + '">\n' +
-                '    <label class="onoffswitch-label" for="' + this.id + '">\n' +
-                '        <span class="onoffswitch-inner"></span>\n' +
-                '        <span class="onoffswitch-switch"></span>\n' +
-                '    </label>';
-            document.body.appendChild(newButton);
-
-            this.onOffEvent = function () {
-                let self = this;
-                this.inputCheck = newButton.querySelector('#' + this.id);
-                this.inputCheck.addEventListener('change', function () {
-                    if (this.checked === false) {
-                        self.lamp.turnOff()
-                    }
-                    else {
-                        self.lamp.turnOn()
-                    }
-                })
-            };
-            this.onOffEvent();
         };
+        let newButton = document.createElement('div');
+        newButton.className = 'onoffswitch';
+        newButton.innerHTML = '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="' + this.id + '">\n' +
+                                '    <label class="onoffswitch-label" for="' + this.id + '">\n' +
+                                 '        <span class="onoffswitch-inner"></span>\n' +
+                                 '        <span class="onoffswitch-switch"></span>\n' +
+                                '    </label>';
+        document.body.appendChild(newButton);
+
+        this.onOffEvent = function () {
+            let self = this;
+            this.inputCheck = newButton.querySelector('#' + this.id);
+            this.inputCheck.addEventListener('change', function () {
+                if (this.checked === false) {
+                    self.lamp.turnOff()
+                }
+                else {
+                    self.lamp.turnOn()
+                }
+            })
+        };
+        this.onOffEvent();
     };
     let newLamp = new ElectricLamp("https://media.geeksforgeeks.org/wp-content/uploads/OFFbulb.jpg", "https://media.geeksforgeeks.org/wp-content/uploads/ONbulb.jpg");
     let button = new SwitchButton('btn_1');
