@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[Bài tập] Phát triển ứng dụng nhỏ mô phỏng câu chuyện Adam và Eva</title>
+</head>
+<body>
+<script type="text/javascript">
+    let Apple = function () {
+        this.weight = 10;
+        this.getWeight = function () {
+            return this.weight
+        };
+        this.decrease = function () {
+            if(this.weight > 0){
+                this.weight--;
+                console.log('Táo: ' + this.weight);
+            }
+        };
+    };
+
+    let Human = function (name, gender, weight) {
+        this.name = name;
+        this.gender = gender;
+        this.weight = weight;
+        this.getName = function () {
+            return this.name
+        };
+        this.getWeight = function () {
+            return this.weight;
+        };
+        this.getGender = function () {
+            return this.gender;
+        };
+        this.checkApple = function (apple) {
+            return apple.weight > 0;
+        };
+        this.eat = function (apple) {
+            if(this.checkApple(apple)){
+                this.weight++;
+                apple.decrease();
+                console.log(this.name + ': ' +this.weight);
+            } else
+                document.write(this.name + ': Hết rồi');
+        };
+        this.say = function (say) {
+            document.write(this.name+ ': ' + say  + '<br>');
+        };
+    };
+
+    let apple = new Apple();
+    console.log(apple.getWeight());
+
+    let adam = new Human('Adam', 'Male', 80 );
+    document.write(adam.getName() + '<br>');
+    document.write(adam.getGender() + '<br>');
+    document.write(adam.getWeight() + '<br>');
+
+    let eva = new Human('Eva', 'Female', 50 );
+    document.write(eva.getName() + '<br>');
+    document.write(eva.getGender() + '<br>');
+    document.write(eva.getWeight() + '<br>');
+
+    adam.say("Táo kìa");
+    eva.say("Xin miếng");
+    eva.eat(apple);
+    adam.eat(apple);
+    eva.eat(apple);
+    adam.eat(apple);
+    eva.eat(apple);
+    adam.eat(apple);
+    eva.say("No rồi, ăn nốt đi");
+    adam.eat(apple);
+    adam.eat(apple);
+    adam.eat(apple);
+    adam.eat(apple);
+    adam.eat(apple);
+</script>
+</body>
+</html>
