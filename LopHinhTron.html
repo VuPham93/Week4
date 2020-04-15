@@ -5,21 +5,32 @@
     <title>[Thực hành] Xây dựng lớp Hình Tròn</title>
 </head>
 <body>
+<canvas id="circle" style=" padding-top: 30px"></canvas>
 <script>
     let Circle = function (radius) {
         this.radius = radius;
         this.getRadius = function () {
             return radius;
-        }
+        };
         this.getArea = function () {
-            return Math.PI * radius * radius;
-        }
-    }
+            return Math.PI * this.radius * this.radius;
+        };
+        this.drawCircle = function () {
+            let ctx = document.getElementById("circle").getContext("2d");
+            let color = "black";
+            ctx.beginPath();
+            ctx.arc(60, 60, this.radius, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+        };
+    };
+
     let input = parseInt(prompt("Nhập bán kính"));
     let circle = new Circle(input);
     let radius = circle.getRadius();
     let area = circle.getArea();
     alert("radius: " + radius + "; area: " +area);
+    circle.drawCircle();
 </script>
 </body>
 </html>
