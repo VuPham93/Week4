@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[*Bài tập] Phát triển ứng dụng mô phỏng lại quá trình mèo bắt chuột và ăn chuột.</title>
+</head>
+<body>
+<script>
+    let Rat = function (name, weigth, speed, status) {
+        this.name = name;
+        this.weight = weigth;
+        this.speed = speed;
+        this.status = status;
+        this.say = function (say) {
+            document.write(this.name + ': ' + say + '<br>');
+        };
+        this.getStatus = function () {
+            return this.status;
+        };
+    };
+
+    let Cat = function (name, weigth, speed) {
+        this.name = name;
+        this.weight = weigth;
+        this.speed = speed;
+        this.say = function (say) {
+            document.write(this.name + ': ' + say + '<br>');
+        };
+        this.eat = function (rat) {
+            if (rat.getStatus() === true) {
+                this.weight = this.weight + rat.weight;
+                document.write(this.name + " weight = " +this.weight +"<br>");
+            }
+        };
+        this.catchRat = function (rat) {
+            if (rat.speed < this.speed) {
+                this.say("Got you bitch!");
+                this.say("Any last word ?");
+                if (rat.getStatus() === true) {
+                    rat.say("Ahhhhhhhh! Please fogive me!!");
+                    this.eat(rat);
+                }
+                else (document.write(this.name + ": This motherF***er already death <br>"))
+            }
+            else {
+                this.say("Ur just lucky little bitch")
+            }
+        };
+    };
+
+    let jerry = new Rat('Jerry', 4, 30, true);
+    let mickey = new Rat('Mickey', 3, 0, false);
+    let rat = new Rat('Rat', 6, 60, true);
+
+    jerry.say("Catch me if u can! Slow ass");
+
+    let tom = new Cat('Tom', 20, 50);
+    tom.catchRat(jerry);
+    tom.catchRat(mickey);
+    tom.catchRat(rat);
+
+</script>
+</body>
+</html>
