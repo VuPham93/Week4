@@ -17,9 +17,11 @@
         };
         this.drawCircle = function () {
             let ctx = document.getElementById("circle").getContext("2d");
+            ctx.canvas.width  = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
             let color = "black";
             ctx.beginPath();
-            ctx.arc(60, 60, this.radius, 0, 2 * Math.PI);
+            ctx.arc((ctx.canvas.width /2) , (ctx.canvas.height /2 ), this.radius, 0, 2 * Math.PI);
             ctx.fillStyle = color;
             ctx.fill();
         };
@@ -31,6 +33,7 @@
     let area = circle.getArea();
     alert("radius: " + radius + "; area: " +area);
     circle.drawCircle();
+
 </script>
 </body>
 </html>
