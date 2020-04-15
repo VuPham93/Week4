@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[*Bài tập] Phát triển chương trình sử dụng Remote để điều khiển Tivi</title>
+</head>
+<body>
+<script>
+    let Remote = function (tv) {
+        this.controlTV = tv;
+        this.getTVStatus = function () {
+            return this.controlTV.status;
+        };
+        this.turnOn = function () {
+            this.controlTV.status = true;
+        };
+        this.turnOff = function () {
+            this.controlTV.status = false;
+        };
+        this.changeChannel = function (channel) {
+            if (this.getTVStatus()) {
+                this.controlTV.channel = channel;
+                document.write("TV channel: " + this.controlTV.channel + "<br>")
+            }
+            else document.write("TV is off <br>")
+        };
+        this.changeVolumeUp = function (x) {
+            if (this.getTVStatus()) {
+                for (let i = 0; i < x; i++) {
+                    this.controlTV.volume++;
+                }
+            }
+            else document.write("TV is off <br>");
+            document.write("TV volume: " + this.controlTV.volume + "<br>")
+        };
+        this.changeVolumeDown = function (y) {
+            if (this.getTVStatus()) {
+                for (let i = 0; i < y; i++) {
+                    this.controlTV.volume--;
+                }
+            }
+            else document.write("TV is off <br>");
+            document.write("TV volume: " + this.controlTV.volume + "<br>")
+        };
+    };
+    let Television = function (channel, volume, status) {
+        this.channel = channel;
+        this.volume = volume;
+        this.status = status;
+    };
+
+    let TV1 = new Television(1,20,false);
+    let remote1 = new Remote(TV1);
+    remote1.getTVStatus();
+    remote1.turnOn();
+    remote1.changeChannel(2);
+    remote1.changeChannel(30);
+    remote1.changeVolumeUp(5);
+    remote1.changeVolumeDown(2);
+    remote1.turnOff();
+    document.write(remote1.getTVStatus());
+</script>
+</body>
+</html>
