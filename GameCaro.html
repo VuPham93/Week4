@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[Bài tập] Phát triển trò chơi cờ ca-ro</title>
+</head>
+<style>
+    #game-board{
+        position: relative;
+        margin-top: 50px;
+    }
+    .cell{
+        border: solid 1px orangered;
+        text-align: center;
+        font-size:20pt;
+        cursor: pointer;
+        color: white;
+        background-color: black;
+        width: 40px;
+        height:40px;
+        position: absolute;
+        line-height: 40px;
+    }
+</style>
+<body>
+<div id="gameBoard" class="game-board">
+</div>
+<script>
+    let Cell = function (x, y, size) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+
+        this.drawCell = function () {
+            let cell =
+                '<div class="cell" ' +
+                'id="cell' + '-' + this.x + '-' + this.y +'" ' +
+                'onclick="play(' + this.x + ',' + this.y +')" ' +
+                'style=" top:'+ this.x * this.size + 'px;left:'+ this.y * this.size + 'px; "></div>';
+            return cell;
+        };
+    };
+
+    let Table = function (size, elementId, cellSize) {
+        this.size = size;
+        this.cells = [];
+        this.cellSize = cellSize;
+        this.elementId = elementId;
+
+        this.draw = function () {
+            let gameBoard = document.getElementById(this.elementId);
+            let row = [];
+            for(let i = 0; i < this.size; i++){
+                this.cells.push(row);
+                for(let j = 0; j < this.size; j++){
+                    let cell = new Cell(i, j, this.cellSize);
+                    row.push(cell);
+                    gameBoard.innerHTML += cell.drawCell();
+                }
+            }
+        };
+
+        let flag = true;
+        this.play = function (x, y) {
+            let cell = document.getElementById("cell-"+x+"-"+y);
+            if (cell.innerHTML === '') {
+                this.checkPlayer(cell);
+                this.checkWin(x, y);
+            }
+        };
+
+        this.checkPlayer = function (cell) {
+            if (flag === true) {
+                cell.innerHTML = "O";}
+            else {
+                cell.innerHTML = "X";
+            }
+            flag = !flag
+        };
+        this.checkWin = function (x, y) {
+            if (this.checkRow(x, y) === 1 || this.checkCol(x, y) === 1 || this.checkWN(x, y) === 1 || this.checkNE(x, y) === 1 ) {
+                alert("X Win");
+            }
+            if (this.checkRow(x, y) === 2 || this.checkCol(x, y) === 2 || this.checkWN(x, y) === 2 || this.checkNE(x, y) === 2 ) {
+                alert("O Win");
+            }
+
+        };
+        this.checkRow = function (x, y) {
+            let countRow1 = 0;
+            let countRow2 = 0;
+            let cell = document.getElementById("cell-" + x + "-" + y).innerHTML;
+            for (let h = x - 1; h >= 0; h--) {
+                if (document.getElementById("cell-" + h + "-" + y).innerHTML === cell) {
+                    countRow1++;
+                }
+                else break;
+            }
+            for (let k = x; k < this.size; k++) {
+                if (document.getElementById("cell-" + k + "-" + y).innerHTML === cell) {
+                    countRow2++;
+            }
+                else break;
+            }
+            let countRow = countRow1 + countRow2;
+            if (countRow >= 5 && cell === 'X') {
+                return 1;
+            }
+            if (countRow >= 5 && cell === 'O') {
+                return 2;
+            }
+        };
+
+        this.checkCol = function (x, y) {
+            let countCol1 = 0;
+            let countCol2 = 0;
+
+            let cell = document.getElementById("cell-" + x + "-" + y).innerHTML;
+            for (let h = y - 1; h >= 0; h--) {
+                if (document.getElementById("cell-" + x + "-" + h).innerHTML === cell) {
+                    countCol1++;
+                }
+                else break;
+            }
+
+            for (let k = y; k < this.size; k++) {
+                if (document.getElementById("cell-" + x + "-" + k).innerHTML === cell) {
+                    countCol2++;
+                }
+                else break;
+            }
+            let countCol = countCol1 + countCol2;
+            if (countCol >= 5 && cell === 'X') {
+                return 1;
+            }
+            if (countCol >= 5 && cell === 'O') {
+                return 2;
+            }
+        };
+
+        this.checkWN = function (x, y) {
+            let countWN1 = 0;
+            let countWN2 = -1;
+            let cell = document.getElementById("cell-" + x + "-" + y).innerHTML;
+            let h = x;
+            let k = 0;
+            for (h; h >= 0; h--) {
+                let objLeft = document.getElementById("cell-" + h + "-" + (y - k));
+                if(objLeft !== null){
+                    if (objLeft.innerHTML === cell) {
+                        countWN1++;
+                        k++;
+                    }
+                    else  break;
+                }
+                else  break;
+
+            }
+
+            let i = x;
+            let j = 0;
+            for (i; i < this.size; i++) {
+                let objRight = document.getElementById("cell-" + i + "-" + (y + j));
+                if(objRight !== null){
+                    if (objRight.innerHTML === cell) {
+                        countWN2++;
+                        j++;
+                    }
+                    else break;
+                }
+                else break;
+            }
+            let countWN = countWN1 + countWN2;
+            if (countWN >= 5 && cell === 'X') {
+                return 1;
+            }
+            if (countWN >= 5 && cell === 'O') {
+                return 2;
+            }
+        };
+
+        this.checkNE = function (x, y) {
+            let countNE1 = 0;
+            let countNE2 = -1;
+            let cell = document.getElementById("cell-" + x + "-" + y).innerHTML;
+            let h = x;
+            let k = x + y;
+            for (h; h >= 0; h--) {
+                let objLeft = document.getElementById("cell-" + h + "-" + (k - h));
+                if(objLeft !== null){
+                    if (objLeft.innerHTML === cell) {
+                        countNE1++;
+                    }
+                    else  break;
+                }
+                else  break;
+            }
+
+            let i = x;
+            let j = x + y;
+            for (i; i < this.size; i++) {
+                let objRight = document.getElementById("cell-" + i + "-" + (j - i));
+                if(objRight !== null){
+                    if (objRight.innerHTML === cell) {
+                        countNE2++;
+                    }
+                    else break;
+                }
+                else break;
+            }
+            let countNE = countNE1 + countNE2;
+            if (countNE >= 5 && cell === 'X') {
+                return 1;
+            }
+            if (countNE >= 5 && cell === 'O') {
+                return 2;
+            }
+        };
+
+    };
+    let game = new Table(20, "gameBoard", 40);
+    game.draw();
+    function play(x, y) {
+        game.play(x, y);
+    }
+</script>
+</body>
+</html>
