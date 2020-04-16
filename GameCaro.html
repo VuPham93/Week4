@@ -5,9 +5,11 @@
     <title>[Bài tập] Phát triển trò chơi cờ ca-ro</title>
 </head>
 <style>
-    #game-board{
+    .game-board{
+        display: block;
         position: relative;
-        margin-top: 50px;
+        margin: auto;
+        max-width: 800px;
     }
     .cell{
         border: solid 1px orangered;
@@ -21,10 +23,33 @@
         position: absolute;
         line-height: 40px;
     }
+    .text{
+        position: absolute;
+        z-index: 999;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 40%;
+        text-align: center;
+        text-shadow: 5px 5px black;
+        font-size: 120px;
+        color: violet;
+        width: 60%;
+    }
+    .button{
+        color: white;
+        background-color: orangered;
+        width: 130px;
+        height: 50px;
+        display: block;
+        margin: auto;
+    }
 </style>
-<body>
-<div id="gameBoard" class="game-board">
-</div>
+<body style="background-color: black; margin: auto">
+<h1 style="font-size: 60px; color: orangered; margin: 0 auto; text-align: center">CARO</h1>
+<div><button class="button" onclick="newGame()">New Game</button></div>
+<div id="gameBoard" class="game-board"></div>
+<div class="text" id="finish"></div>
 <script>
     let Cell = function (x, y, size) {
         this.x = x;
@@ -77,14 +102,14 @@
             }
             flag = !flag
         };
+
         this.checkWin = function (x, y) {
             if (this.checkRow(x, y) === 1 || this.checkCol(x, y) === 1 || this.checkWN(x, y) === 1 || this.checkNE(x, y) === 1 ) {
-                alert("X Win");
+                document.getElementById("finish").innerHTML = "X Win!";
             }
             if (this.checkRow(x, y) === 2 || this.checkCol(x, y) === 2 || this.checkWN(x, y) === 2 || this.checkNE(x, y) === 2 ) {
-                alert("O Win");
+                document.getElementById("finish").innerHTML = "O Win!";
             }
-
         };
         this.checkRow = function (x, y) {
             let countRow1 = 0;
@@ -154,7 +179,6 @@
                     else  break;
                 }
                 else  break;
-
             }
 
             let i = x;
@@ -218,10 +242,19 @@
         };
 
     };
-    let game = new Table(20, "gameBoard", 40);
-    game.draw();
+
     function play(x, y) {
         game.play(x, y);
+    }
+
+    let game = new Table(20, "gameBoard", 40);
+    game.draw();
+
+    function newGame() {
+        document.getElementById("gameBoard").innerHTML = "";
+        game = new Table(20, "gameBoard", 40);
+        game.draw();
+        document.getElementById("finish").innerHTML = "";
     }
 </script>
 </body>
