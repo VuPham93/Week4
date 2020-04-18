@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[*Bài tập] Phát triển game lái xe</title>
+</head>
+<body style="background-color: black">
+<style>
+    canvas {
+        border: 1px solid #d3d3d3;
+        background-color: #f1f1f1;
+    }
+</style>
+<canvas id="gameField"></canvas>
+<script>
+    //Draw game area;
+    let canvas = document.getElementById("gameField");
+    canvas.width = 1366;
+    canvas.height = 768;
+    canvas.style.background = "url('field.jpg')";
+    let ctx = canvas.getContext("2d");
+    interval = setInterval(updateGameArea, 20);
+    let clear = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    let stop = function () {
+        clearInterval(this.interval);
+    };
+
+    function updateGameArea() {
+        clear();
+        newCar.update();
+        myScore.text = "SCORE: " + score;
+        myScore.update();
+        for (let i = 0; i < 10;i++) {
+            newObj[i].update();
+            if (checkHit(newCar, newObj[i])) {
+                stop();
+                alert("Game Over");
+            }
+        }
+        for (let i = 0; i < 10;i++) {
+            coin[i].update();
+            if (checkHit(newCar, coin[i])) {
+                score++;
+                coin[i].disappear();
+
+            }
+        }
+    }
+
+    //Creat class Car
+    let Car = function (size, x, y, image, speed) {
+        this.width = size;
+        this.height = size;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.image = new Image();
+        this.image.src = image;
+        this.update = function () {
+            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        }
+    };
+
+    let newCar = new Car(60, 630, 370, "up.png", 10);
+
+    //Move car
+    document.body.onkeydown = function( e ) {
+        let keys = {
+            37: 'left',
+            39: 'right',
+            38: 'up',
+            40: 'down',
+            17: 'ctrl',
+        };
+        if ( typeof keys[ e.keyCode ] != 'undefined' ) {
+            keyPress( keys[ e.keyCode ], newCar);
+        }
+    };
+
+    function keyPress(key, obj) {
+        switch (key) {
+            case 'left': {
+                obj.x = newCar.x - obj.speed;
+                obj.image.src = "left.png";
+                break;
+            }
+            case 'right': {
+                obj.x = obj.x + obj.speed;
+                obj.image.src = "right.png";
+                break;
+            }
+            case 'up': {
+                obj.y = obj.y - obj.speed;
+                obj.image.src = "up.png";
+                break;
+            }
+            case 'down': {
+                obj.y = obj.y + obj.speed;
+                obj.image.src = "down.png";
+                break;
+            }
+            case 'ctrl': {
+                obj.speed = obj.speed + 2;
+            }
+        }
+    }
+    //Creat class Impediment
+    let Impediment = function () {
+        let size = (Math.random() * 80) + 50;
+        this.width = size;
+        this.height = size;
+        let random = getRandom();
+        let x = random.xValue;
+        let y = random.yValue;
+        this.image = new Image();
+        this.image.src = "cactus.png";
+        this.update = function () {
+            ctx.drawImage(this.image, x, y, this.width, this.height);
+        };
+        this.getX = function () {
+            return x;
+        };
+        this.getY = function () {
+            return y;
+        };
+    };
+
+    let getRandom = function() {
+        let i = Math.random() * canvas.width;
+        let j = Math.random() * canvas.height;
+        if (600 < i < 660 || 330 < j < 410) {
+            i = i + 50;
+            j = j + 50;
+        }
+        return {
+            xValue : i,
+            yValue : j
+        };
+    };
+
+    let newObj = [];
+    for (let i = 0; i < 10;i++) {
+        newObj[i] = new Impediment();
+    }
+
+    //Creat class Coin
+    let Coin = function () {
+        let size = 40;
+        this.width = size;
+        this.height = size;
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        this.image = new Image();
+        this.image.src = "coin.png";
+        this.update = function () {
+            ctx.drawImage(this.image, x, y, this.width, this.height);
+        };
+        this.getX = function () {
+            return x;
+        };
+        this.getY = function () {
+            return y;
+        };
+        this.disappear = function () {
+            x = Math.random() * canvas.width;
+            y = Math.random() * canvas.height;
+        }
+    };
+    let coin = [];
+    for (let i = 0; i < 10;i++) {
+        coin[i] = new Coin();
+    }
+    //Creat class Point
+    let Point = function (width, height, color, x, y,) {
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        ctx.font = this.width + " " + this.height;
+        ctx.fillStyle = color;
+        this.update = function () {
+            ctx.fillText(this.text, this.x, this.y);
+        }
+    };
+    myScore = new Point("30px", "Consolas", "black", 1166, 40);
+    let score = 0;
+
+    //Test crash
+    let checkHit = function(car, obj) {
+        let carLeft = car.x;
+        let carRight = car.x + (car.width);
+        let carTop = car.y;
+        let carBottom = car.y + (car.height);
+        let objLeft = obj.getX() + 20;
+        let objRight = obj.getX() + (obj.width) - 20;
+        let objTop = obj.getY() + 20;
+        let objBottom = obj.getY() + (obj.height) - 20;
+        let hit = true;
+        if ((carBottom < objTop) ||
+            (carTop > objBottom) ||
+            (carRight < objLeft) ||
+            (carLeft > objRight)) {
+            hit = false;
+        }
+        return hit;
+    };
+
+</script>
+</body>
+</html>
